@@ -7,7 +7,7 @@ SDL2FLAGS := $(shell pkg-config --cflags sdl2)
 SDL2LIBS := $(shell pkg-config --libs sdl2) -lSDL2_image -lSDL2_ttf
 
 # Compilation flags
-CXXFLAGS := -Wall -g -std=c++17 $(SDL2FLAGS)
+CXXFLAGS := -Wall -g -std=c++17 -Iinclude $(SDL2FLAGS)
 
 # Source and object files
 SRCDIR := src
