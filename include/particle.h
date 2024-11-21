@@ -1,22 +1,23 @@
 #pragma once 
 
 typedef struct Vector{
-  int x;
-  int y;
+  float x;
+  float y;
 } Vector;
 
 class Particle{
 
   private:
-    Vector pos, velocity;
+    Vector velocity;
 
   public:
-    Particle(int x, int y);
+
+    Vector pos;
+    Particle(float x, float y);
 
     // Update particle pos
-    void Move();
+    void Move(float Timestep);
 
     // Render particle
-    void Draw(SDL_Renderer *render, int r, int g, int b);
-
+    void Draw(SDL_Renderer * &render, int r, int g, int b);
 };

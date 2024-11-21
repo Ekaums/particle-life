@@ -4,28 +4,31 @@
 #include <iostream>
 #include "../include/particle.h"
 
-Particle::Particle(int x, int y){
+Particle::Particle(float x, float y){
   pos.x = x;
   pos.y = y;
 
-  // Rand number between -3 and 3
+  // Random values
   std::random_device rd;  // Seed
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distrib(-3, 3);
+  std::uniform_real_distribution<float> distrib(-600, 600);
+  float random = distrib(gen);
 
-  velocity.x = distrib(gen);
-  velocity.y = distrib(gen);
+  velocity.x = random;
+  velocity.y = random;
 }
 
-void Particle::Move(){
-  pos.x += velocity.x;
-  pos.y += velocity.y;
+void Particle::Move(float Timestep){
+  pos.x += velocity.x * Timestep;
+  pos.y += velocity.y * Timestep;
 }
 
-void Particle::Draw(SDL_Renderer *render, int r, int g, int b){
+void Particle::Draw(SDL_Renderer * &render, int r, int g, int b){
   
   // Set colour for particle
   SDL_SetRenderDrawColor(render, r, g, b, 255);
-  SDL_Rect particleRect = {pos.x, pos.y, 10, 10};
+  // Generate particle
+  SDL_Rect particleRect = {static_cast<int>(pos.x), static_cast<int>(pos.y), 10, 10};
+  // Draw
   SDL_RenderFillRect(render, &particleRect);
 }
