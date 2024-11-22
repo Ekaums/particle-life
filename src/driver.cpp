@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <SDL.h>
 #include <SDL_rect.h>
 #include "../include/screen.h"
@@ -15,8 +16,12 @@ int main(){
     bool quit{false};
     SDL_Event e;
 
-    Particle dude{SCREEN_W/2, SCREEN_H/2};
+    std::vector<Particle> particles;
     Timer timer;
+
+    for(int i = 0; i < 100; i++){
+      particles.push_back(Particle(SCREEN_W/2, SCREEN_H/2));
+    }
 
     while(!quit){
       
@@ -32,11 +37,10 @@ int main(){
         SDL_SetRenderDrawColor(render, 0, 0, 0, 255); // Black
         SDL_RenderClear(render);
 
-        float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
-        dude.Move(time);
-        // Update render
-        dude.Draw(render, 255, 0, 0);
-        // Display it
+        for(Particle& p : particles){
+          p.Move();
+          p.Draw(render, 255, 0, 0);
+        }
         SDL_RenderPresent(render);
     }
 

@@ -6,22 +6,23 @@
 #include "../include/screen.h"
 
 Particle::Particle(float x, float y){
-  pos.x = x;
-  pos.y = y;
-
-  // Random values
+    // Random values
   std::random_device rd;  // Seed
   std::mt19937 gen(rd());
   std::uniform_real_distribution<float> distrib(-600, 600);
-  float random = distrib(gen);
 
-  velocity.x = random;
-  velocity.y = random;
+  pos.x = distrib(gen);
+  pos.y = distrib(gen);
+
+  velocity.x = distrib(gen);
+  velocity.y = distrib(gen);
 }
 
-void Particle::Move(float Timestep){
-  pos.x += velocity.x * Timestep;
-  pos.y += velocity.y * Timestep;
+void Particle::Move(){
+  
+  float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
+  pos.x += velocity.x * time;
+  pos.y += velocity.y * time;
 
   if(pos.x < 0){
     pos.x = 0;

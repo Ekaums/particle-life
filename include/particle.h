@@ -1,5 +1,7 @@
 #pragma once 
 
+#include "../include/timer.h" // TODO: is this necessary? better way to organize?
+
 typedef struct Vector{
   float x;
   float y;
@@ -9,6 +11,8 @@ class Particle{
 
   private:
     Vector velocity;
+    // Vector pos;
+    Timer timer;
 
   public:
 
@@ -16,7 +20,7 @@ class Particle{
     Particle(float x, float y);
 
     // Update particle pos
-    void Move(float Timestep);
+    void Move();
 
     // Render particle
     void Draw(SDL_Renderer * &render, int r, int g, int b);
