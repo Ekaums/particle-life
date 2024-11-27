@@ -14,7 +14,7 @@ int main(){
     init(window, render);
 
     bool quit{false};
-    bool playing{true};
+    bool paused{false};
     SDL_Event event;
 
     std::vector<Particle> particles;
@@ -32,25 +32,28 @@ int main(){
               quit = true;
 
             else if(event.type == SDL_KEYDOWN){
+              // User pause/play
               if(event.key.keysym.sym == SDLK_SPACE){
-                playing = !playing;
+                paused = !paused;
                 std::cout << "pause/play\n";
               }
             }
         }
 
         /* Game loop */
-        if(playing){
-          // Clean screen
-          SDL_SetRenderDrawColor(render, 0, 0, 0, 255); // Black
-          SDL_RenderClear(render);
+        if(paused)
+          // don't render
+          continue;
 
-          for(Particle& p : particles){
-            p.Move();
-            p.Draw(render, 255, 0, 0);
-          }
-          SDL_RenderPresent(render);
+        // Clean screen
+        SDL_SetRenderDrawColor(render, 0, 0, 0, 255); // Black
+        SDL_RenderClear(render);
+
+        for(Particle& p : particles){
+          p.Move();
+          p.Draw(render, 255, 0, 0);
         }
+        SDL_RenderPresent(render);
     }
 
     SDL_DestroyRenderer(render);
