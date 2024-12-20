@@ -6,7 +6,7 @@
 #include "../include/particle.h"
 #include "../include/timer.h"
 
-#define NUM_PARTICLES 1000
+#define NUM_PARTICLES 5
 int main(){
 
     // Setup SDL window and renderer 
@@ -56,7 +56,7 @@ int main(){
 
         for(Particle& p : particles){
           p.Move(time);
-          p.Draw(render, 255, 0, 0);
+          p.Draw(render, 0, 255, 255);
         }
         SDL_RenderPresent(render);
     }

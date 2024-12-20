@@ -5,23 +5,32 @@
 #include "../include/particle.h"
 #include "../include/screen.h"
 
+
+void Vector::update(Vector u, float time){
+  this->x += u.x * time;
+  this->y += u.y * time;
+
+}
 Particle::Particle(float x, float y){
   // Random values
   std::random_device rd;  // Seed
   std::mt19937 gen(rd());
-  std::uniform_real_distribution<float> distrib(-600, 600);
+  std::uniform_real_distribution<float> distrib(-60, 60);
 
   pos.x = distrib(gen);
   pos.y = distrib(gen);
 
   velocity.x = distrib(gen);
   velocity.y = distrib(gen);
+
+  acceleration.x = 5;
+  acceleration.y = -5;
 }
 
 void Particle::Move(float time){
   
-  pos.x += velocity.x * time;
-  pos.y += velocity.y * time;
+  velocity.update(acceleration, time);
+  pos.update(velocity, time);
 
   if(pos.x < 0){
     pos.x = 0;

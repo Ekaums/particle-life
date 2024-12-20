@@ -5,12 +5,16 @@
 typedef struct Vector{
   float x;
   float y;
+
+  void update(Vector u, float time);
+
 } Vector;
 
 class Particle{
 
   private:
     Vector velocity;
+    Vector acceleration;
     // Vector pos;
 
   public:
