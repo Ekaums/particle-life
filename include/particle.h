@@ -12,11 +12,11 @@ class Particle{
   private:
     Vector velocity;
     // Vector pos;
-    Timer timer;
 
   public:
 
     Vector pos;
+    Timer timer;
     Particle(float x, float y);
 
     // Update particle pos

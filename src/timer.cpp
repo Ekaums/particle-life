@@ -13,3 +13,7 @@ uint32_t Timer::getTicks(){
   ticks += new_ticks;
   return new_ticks;
 }
+
+void Timer::unpause(){
+  ticks = SDL_GetTicks();
+}

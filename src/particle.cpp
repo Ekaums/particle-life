@@ -6,7 +6,7 @@
 #include "../include/screen.h"
 
 Particle::Particle(float x, float y){
-    // Random values
+  // Random values
   std::random_device rd;  // Seed
   std::mt19937 gen(rd());
   std::uniform_real_distribution<float> distrib(-600, 600);

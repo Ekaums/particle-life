@@ -35,7 +35,11 @@ int main(){
               // User pause/play
               if(event.key.keysym.sym == SDLK_SPACE){
                 paused = !paused;
-                std::cout << "pause/play\n";
+                if(paused == false){
+                      for(int i = 0; i < 1000; i++){
+                        particles[i].timer.unpause();
+                      }
+                }
               }
             }
         }
