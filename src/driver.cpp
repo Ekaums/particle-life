@@ -6,6 +6,7 @@
 #include "../include/particle.h"
 #include "../include/timer.h"
 
+#define NUM_PARTICLES 1000
 int main(){
 
     // Setup SDL window and renderer 
@@ -20,7 +21,7 @@ int main(){
     std::vector<Particle> particles;
     Timer timer;
 
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < NUM_PARTICLES; i++){
       particles.push_back(Particle(SCREEN_W/2, SCREEN_H/2));
     }
 
@@ -36,9 +37,7 @@ int main(){
               if(event.key.keysym.sym == SDLK_SPACE){
                 paused = !paused;
                 if(paused == false){
-                      for(int i = 0; i < 1000; i++){
-                        particles[i].timer.unpause();
-                      }
+                      timer.unpause();
                 }
               }
             }
@@ -53,8 +52,10 @@ int main(){
         SDL_SetRenderDrawColor(render, 0, 0, 0, 255); // Black
         SDL_RenderClear(render);
 
+        float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
+
         for(Particle& p : particles){
-          p.Move();
+          p.Move(time);
           p.Draw(render, 255, 0, 0);
         }
         SDL_RenderPresent(render);

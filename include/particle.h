@@ -16,11 +16,10 @@ class Particle{
   public:
 
     Vector pos;
-    Timer timer;
     Particle(float x, float y);
 
     // Update particle pos
-    void Move();
+    void Move(float time);
 
     // Render particle
     void Draw(SDL_Renderer * &render, int r, int g, int b);

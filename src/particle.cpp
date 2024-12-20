@@ -18,9 +18,8 @@ Particle::Particle(float x, float y){
   velocity.y = distrib(gen);
 }
 
-void Particle::Move(){
+void Particle::Move(float time){
   
-  float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
   pos.x += velocity.x * time;
   pos.y += velocity.y * time;
 
