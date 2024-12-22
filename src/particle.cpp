@@ -6,48 +6,53 @@
 #include "../include/screen.h"
 
 
-void Vector::update(Vector u, float time){
-  this->x += u.x * time;
-  this->y += u.y * time;
-
-}
-Particle::Particle(float x, float y){
-  // Random values
-  std::random_device rd;  // Seed
-  std::mt19937 gen(rd());
-  std::uniform_real_distribution<float> distrib(-60, 60);
-
-  pos.x = distrib(gen);
-  pos.y = distrib(gen);
-
-  velocity.x = distrib(gen);
-  velocity.y = distrib(gen);
-
-  acceleration.x = 5;
-  acceleration.y = -5;
+Particle::Particle(){
+  // Each particle has random position, velocity, and acceleration
+  pos.rand(0, SCREEN_H); // TODO: scuffed random position
+  vel.rand(-155, 155);
+  acc.randNorm();
 }
 
 void Particle::Move(float time){
   
-  velocity.update(acceleration, time);
-  pos.update(velocity, time);
+  // Each frame, give particle random acceleration
+  acc.randNorm();
 
+  vel.update(acc, time);
+
+  // Max velocity
+  if(vel.x > 155){
+    vel.x = 155;
+  }
+  else if(vel.x < -155){
+    vel.x = -155;
+  }
+  if(vel.y > 155){
+    vel.y = 155;
+  }
+  else if(vel.y < -155){
+    vel.y = -155;
+  }
+
+
+  pos.update(vel, time);
+  
+  // Keep particle within window
   if(pos.x < 0){
     pos.x = 0;
-    velocity.x *= -1;
+    vel.x *= -1;
   }
   else if(pos.x > SCREEN_W){
     pos.x = SCREEN_W;
-    velocity.x *= -1;
+    vel.x *= -1;
   }
-
   if(pos.y < 0){
     pos.y = 0;
-    velocity.y *= -1;
+    vel.y *= -1;
   }
   else if(pos.y > SCREEN_H){
     pos.y = SCREEN_H;
-    velocity.y *= -1;
+    vel.y *= -1;
   }
   
 }

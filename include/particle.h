@@ -1,28 +1,17 @@
 #pragma once 
 
-#include "../include/timer.h" // TODO: is this necessary? better way to organize?
-
-typedef struct Vector{
-  float x;
-  float y;
-
-  void update(Vector u, float time);
-
-} Vector;
+#include "../include/vector.h"
 
 class Particle{
 
   private:
-    Vector velocity;
-    Vector acceleration;
-    // Vector pos;
+    // Each particle has position, velocity, and acceleration
+    Vector pos, vel, acc;
 
   public:
+    Particle();
 
-    Vector pos;
-    Particle(float x, float y);
-
-    // Update particle pos
+    // Update particle's movement based on time elapsed
     void Move(float time);
 
     // Render particle

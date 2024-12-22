@@ -6,23 +6,25 @@
 #include "../include/particle.h"
 #include "../include/timer.h"
 
-#define NUM_PARTICLES 5
-int main(){
+int main(int argc, char** argv){
 
     // Setup SDL window and renderer 
     SDL_Window *window;
     SDL_Renderer *render;
     init(window, render);
 
+    // Variables to keep track of state
     bool quit{false};
     bool paused{false};
     SDL_Event event;
 
     std::vector<Particle> particles;
     Timer timer;
+    
+    int num_particles = std::stoi(argv[1]);
 
-    for(int i = 0; i < NUM_PARTICLES; i++){
-      particles.push_back(Particle(SCREEN_W/2, SCREEN_H/2));
+    for(int i = 0; i < num_particles; i++){
+      particles.push_back(Particle());
     }
 
     while(!quit){
@@ -33,11 +35,11 @@ int main(){
               quit = true;
 
             else if(event.type == SDL_KEYDOWN){
-              // User pause/play
+              // User pressed pause/play
               if(event.key.keysym.sym == SDLK_SPACE){
-                paused = !paused;
+                paused = !paused; // Pressing space will pause/unpause
                 if(paused == false){
-                      timer.unpause();
+                      timer.unpause(); // If paused then unpaused, update timer
                 }
               }
             }
