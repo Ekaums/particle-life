@@ -6,6 +6,8 @@
 #include "../include/particle.h"
 #include "../include/timer.h"
 
+std::vector<Particle> particles;
+
 int main(int argc, char** argv){
 
     // Setup SDL window and renderer 
@@ -18,7 +20,6 @@ int main(int argc, char** argv){
     bool paused{false};
     SDL_Event event;
 
-    std::vector<Particle> particles;
     Timer timer;
     
     int num_particles = std::stoi(argv[1]);

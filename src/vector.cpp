@@ -1,9 +1,21 @@
 #include "../include/vector.h"
 #include <random>
 
-void Vector::update(Vector u, float time){
-  this->x += u.x * time;
-  this->y += u.y * time;
+void Vector::update(Vector &v1, float time){
+  this->x += v1.x * time;
+  this->y += v1.y * time;
+}
+
+void Vector::Norm(){
+  float mag = std::sqrt(x*x + y*y);
+
+  // Normalize vector
+  this->x = x/mag;
+  this->y = y/mag;
+}
+
+float Vector::Dot(const Vector &o){
+  return this->x * o.x + this->y * o.y;
 }
 
 void Vector::rand(float a, float b){
