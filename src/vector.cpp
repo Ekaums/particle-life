@@ -14,8 +14,8 @@ void Vector::Norm(){
   this->y = y/mag;
 }
 
-float Vector::Dot(const Vector &o){
-  return this->x * o.x + this->y * o.y;
+float Vector::Dot(const Vector &v) const{
+  return this->x * v.x + this->y * v.y;
 }
 
 void Vector::rand(float a, float b){
@@ -48,7 +48,7 @@ void Vector::randNorm(){
     this->y = y/mag;
 
     // Scale vector to certain magnitude
-    float scale_mag = 5000.0f; // Example magnitude
+    float scale_mag = 800.0f; // TODO: magic number
     this->x *= scale_mag;
     this->y *= scale_mag;
 }

@@ -59,7 +59,7 @@ int main(int argc, char** argv){
 
         for(Particle& p : particles){
           p.Move(time);
-          p.Draw(render, 0, 255, 255);
+          p.Draw(render,255, 165, 50);
         }
         SDL_RenderPresent(render);
     }

@@ -15,7 +15,7 @@ class Particle{
     // Update particle's movement based on time elapsed
     void Move(float time);
 
-    static void checkCollision(Particle &p, std::vector<Particle>& particles);
+    static void resolveCollisions(Particle &p, std::vector<Particle>& particles);
 
     // Render particle
     void Draw(SDL_Renderer * &render, int r, int g, int b);
