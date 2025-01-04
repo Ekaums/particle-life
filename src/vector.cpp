@@ -1,9 +1,21 @@
 #include "../include/vector.h"
 #include <random>
 
-void Vector::update(Vector u, float time){
-  this->x += u.x * time;
-  this->y += u.y * time;
+void Vector::update(Vector &v1, float time){
+  this->x += v1.x * time;
+  this->y += v1.y * time;
+}
+
+void Vector::Norm(){
+  float mag = std::sqrt(x*x + y*y);
+
+  // Normalize vector
+  this->x = x/mag;
+  this->y = y/mag;
+}
+
+float Vector::Dot(const Vector &v) const{
+  return this->x * v.x + this->y * v.y;
 }
 
 void Vector::rand(float a, float b){
@@ -36,7 +48,7 @@ void Vector::randNorm(){
     this->y = y/mag;
 
     // Scale vector to certain magnitude
-    float scale_mag = 5000.0f; // Example magnitude
+    float scale_mag = 800.0f; // TODO: magic number
     this->x *= scale_mag;
     this->y *= scale_mag;
 }
