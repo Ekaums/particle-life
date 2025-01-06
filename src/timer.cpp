@@ -2,8 +2,7 @@
 #include "../include/timer.h"
 
 uint32_t Timer::getTicks(){
-
- if(!started){
+  if(!started){
     started = true;
     ticks = SDL_GetTicks();
     return 0;

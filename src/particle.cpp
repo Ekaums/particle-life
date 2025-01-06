@@ -17,7 +17,6 @@ Particle::Particle(){
 }
 
 void Particle::Move(float time){
-  
   // Each frame, give particle random acceleration
   acc.randNorm();
   vel.update(acc, time);
@@ -62,7 +61,6 @@ void Particle::Move(float time){
 }
 
 void Particle::Draw(SDL_Renderer* &render, int r, int g, int b){
-  
   // Set colour for particle
   SDL_SetRenderDrawColor(render, r, g, b, 255);
   // Generate particle
@@ -72,7 +70,6 @@ void Particle::Draw(SDL_Renderer* &render, int r, int g, int b){
 }
 
 void Particle::resolveCollisions(Particle &p, std::vector<Particle>& particles){
-
   for(Particle& otherP : particles){
 
     if(&otherP == &p){ // If same particle, skip 

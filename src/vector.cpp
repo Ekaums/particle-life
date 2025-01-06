@@ -30,26 +30,26 @@ void Vector::rand(float a, float b){
 }
 
 void Vector::randNorm(){
-    // Random values
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
+  // Random values
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
-    // generate random (non-zero) values
-    float x, y;
-    do{
-      x = dist(gen);
-      y = dist(gen);
-    } while(x == 0.0f && y == 0.0f);
+  // generate random (non-zero) values
+  float x, y;
+  do{
+    x = dist(gen);
+    y = dist(gen);
+  } while(x == 0.0f && y == 0.0f);
 
-    float mag = std::sqrt(x*x + y*y);
-    // Normalize vector
-    this->x = x/mag;
-    this->y = y/mag;
+  float mag = std::sqrt(x*x + y*y);
+  // Normalize vector
+  this->x = x/mag;
+  this->y = y/mag;
 
-    // Scale vector to certain magnitude
-    float scale_mag = 800.0f; // TODO: magic number
-    this->x *= scale_mag;
-    this->y *= scale_mag;
+  // Scale vector to certain magnitude
+  float scale_mag = 2000; // TODO: magic number
+  this->x *= scale_mag;
+  this->y *= scale_mag;
 }
 
