@@ -25,7 +25,10 @@ int main(int argc, char** argv){
   int num_particles = std::stoi(argv[1]);
 
   for(int i = 0; i < num_particles; i++){
-    particles.push_back(Particle());
+    if(i%2)
+    particles.push_back(Particle(R));
+    else
+    particles.push_back(Particle(B));
   }
 
   while(!quit){
@@ -52,14 +55,14 @@ int main(int argc, char** argv){
         continue;
 
       // Clean screen
-      SDL_SetRenderDrawColor(render, 0, 0, 0, 255); // Black
+      SDL_SetRenderDrawColor(render, 222, 216, 228, 255); 
       SDL_RenderClear(render);
 
       float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
 
       for(Particle& p : particles){
         p.Move(time);
-        p.Draw(render,255, 165, 50);
+        p.Draw(render);
       }
       SDL_RenderPresent(render);
   }

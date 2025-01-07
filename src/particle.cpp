@@ -9,16 +9,21 @@
 
 extern std::vector<Particle> particles;
 
-Particle::Particle(){
+Particle::Particle(Colour c){
   // Each particle has random position, velocity, and acceleration
   pos.rand(0, SCREEN_W); // TODO: scuffed random position
-  vel.rand(-155, 155);
+  vel.rand(-155, 155); // TODO: magic num
   acc.randNorm();
+  acc *= 100; // Scale acc // TODO: scuffed
+
+  // Also has a type (depending on colour)
+  col = c;
 }
 
 void Particle::Move(float time){
   // Each frame, give particle random acceleration
   acc.randNorm();
+  acc *= 100; // TODO: scuffed scaling
   vel.update(acc, time);
 
   // Max velocity
@@ -56,13 +61,24 @@ void Particle::Move(float time){
     vel.y *= -1;
   }
 
-  // Handle any particle collisions
+  // Handle any physical collisions
   resolveCollisions(*this, particles);
+
+  // Handle any magic forces
+  resolveForces(*this, particles);
 }
 
-void Particle::Draw(SDL_Renderer* &render, int r, int g, int b){
+void Particle::Draw(SDL_Renderer* &render){
   // Set colour for particle
-  SDL_SetRenderDrawColor(render, r, g, b, 255);
+  // TODO: use a map or smthng instead of switch case
+  switch (col){
+    case R:
+      SDL_SetRenderDrawColor(render, 255, 128, 128, 255);
+      break;
+    case B:
+      SDL_SetRenderDrawColor(render, 100, 149, 237, 255);
+      break;
+  }
   // Generate particle
   SDL_Rect particleRect = {static_cast<int>(pos.x), static_cast<int>(pos.y), PARTICLE_SIZE, PARTICLE_SIZE};
   // Draw
@@ -72,7 +88,7 @@ void Particle::Draw(SDL_Renderer* &render, int r, int g, int b){
 void Particle::resolveCollisions(Particle &p, std::vector<Particle>& particles){
   for(Particle& otherP : particles){
 
-    if(&otherP == &p){ // If same particle, skip 
+    if(&p == &otherP){ // If same particle, skip 
       continue;
     }
 
@@ -138,6 +154,51 @@ void Particle::resolveCollisions(Particle &p, std::vector<Particle>& particles){
           otherP.pos.y += overlapY/2; 
         }
       }
+    }
+  }
+}
+
+
+void Particle::resolveForces(Particle &p, std::vector<Particle>& particles){
+  bool attract{false};
+
+  for(Particle& otherP : particles){
+  
+    if(&p == &otherP) // If same particle, skip
+      continue;
+
+    attract = false;
+
+    if(p.col == otherP.col){ // If same colour, attract
+      attract = true;
+      //continue;
+    }
+    
+
+    // SDL draws shapes starting from the top-left. So the centre of each square is found here
+    Vector centreOfP = p.pos + Vector(PARTICLE_SIZE / 2, PARTICLE_SIZE / 2);
+    Vector centreOfOtherP = otherP.pos + Vector(PARTICLE_SIZE / 2, PARTICLE_SIZE / 2);
+    Vector distance = centreOfP - centreOfOtherP;
+
+    if(distance.x > 25 || distance.y > 25){ // OR I can do opposite check and check if both are within distance value (and do forces)
+      continue; // Too far
+    }
+    // TODO: too close (avoid divide by 0)
+
+    float magnitude = std::sqrt(distance.x * distance.x + distance.y * distance.y);
+    distance.Normalize(); // Normal vector now (prolly change)
+    float strength = 1000;
+
+    float forceMag = strength / (magnitude * magnitude);
+    Vector force = distance * forceMag;
+    
+    if(attract){
+      otherP.vel += force;
+      p.vel -= force;
+    }
+    else{
+      otherP.vel -= force;
+      p.vel += force;
     }
   }
 }

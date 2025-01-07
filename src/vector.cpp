@@ -6,7 +6,7 @@ void Vector::update(Vector &v1, float time){
   this->y += v1.y * time;
 }
 
-void Vector::Norm(){
+void Vector::Normalize(){
   float mag = std::sqrt(x*x + y*y);
 
   // Normalize vector
@@ -46,10 +46,5 @@ void Vector::randNorm(){
   // Normalize vector
   this->x = x/mag;
   this->y = y/mag;
-
-  // Scale vector to certain magnitude
-  float scale_mag = 2000; // TODO: magic number
-  this->x *= scale_mag;
-  this->y *= scale_mag;
 }
 

@@ -39,12 +39,17 @@ typedef struct Vector{
             this->y * n};
   }
 
+  void operator*=(float n){
+    this->x *= n; 
+    this->y *= n;
+  }
+
   // Generate a random vector based on bounds [a, b]
   void rand(float a, float b);
 
   float Dot(const Vector &o) const;
 
-  void Norm();
+  void Normalize();
 
   // Generate a random unit vector
   void randNorm();
