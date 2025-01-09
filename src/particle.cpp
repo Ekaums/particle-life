@@ -7,12 +7,14 @@
 #include "../include/screen.h"
 #include "../include/vector.h"
 
-extern std::vector<Particle> particles;
+extern std::vector<Particle> g_particles;
+const int particleSize{10};
+const int maxVel{105};
 
 Particle::Particle(Colour c){
   // Each particle has random position, velocity, and acceleration
   pos.rand(0, SCREEN_W); // TODO: scuffed random position
-  vel.rand(-155, 155); // TODO: magic num
+  vel.rand(-maxVel, maxVel); 
   acc.randNorm();
   acc *= 100; // Scale acc // TODO: scuffed
 
@@ -27,17 +29,17 @@ void Particle::Move(float time){
   vel.update(acc, time);
 
   // Max velocity
-  if(vel.x > 155){
-    vel.x = 155;
+  if(vel.x > maxVel){
+    vel.x = maxVel;
   }
-  else if(vel.x < -155){
-    vel.x = -155;
+  else if(vel.x < -maxVel){
+    vel.x = -maxVel;
   }
-  if(vel.y > 155){
-    vel.y = 155;
+  if(vel.y > maxVel){
+    vel.y = maxVel;
   }
-  else if(vel.y < -155){
-    vel.y = -155;
+  else if(vel.y < -maxVel){
+    vel.y = -maxVel;
   }
 
   pos.update(vel, time);
@@ -48,24 +50,24 @@ void Particle::Move(float time){
     pos.x = 0;
     vel.x *= -1;
   }
-  else if(pos.x + PARTICLE_SIZE > SCREEN_W){
-    pos.x = SCREEN_W - PARTICLE_SIZE;
+  else if(pos.x + particleSize > SCREEN_W){
+    pos.x = SCREEN_W - particleSize;
     vel.x *= -1;
   }
   if(pos.y < 0){
     pos.y = 0;
     vel.y *= -1;
   }
-  else if(pos.y + PARTICLE_SIZE > SCREEN_H){
-    pos.y = SCREEN_H - PARTICLE_SIZE;
+  else if(pos.y + particleSize > SCREEN_H){
+    pos.y = SCREEN_H - particleSize;
     vel.y *= -1;
   }
 
   // Handle any physical collisions
-  resolveCollisions(*this, particles);
+  resolveCollisions(*this, g_particles);
 
   // Handle any magic forces
-  resolveForces(*this, particles);
+  resolveForces(*this, g_particles);
 }
 
 void Particle::Draw(SDL_Renderer* &render){
@@ -75,12 +77,17 @@ void Particle::Draw(SDL_Renderer* &render){
     case R:
       SDL_SetRenderDrawColor(render, 255, 128, 128, 255);
       break;
+
+    case G:
+      SDL_SetRenderDrawColor(render, 0, 168, 107, 255);
+      break;
+
     case B:
       SDL_SetRenderDrawColor(render, 100, 149, 237, 255);
       break;
   }
   // Generate particle
-  SDL_Rect particleRect = {static_cast<int>(pos.x), static_cast<int>(pos.y), PARTICLE_SIZE, PARTICLE_SIZE};
+  SDL_Rect particleRect = {static_cast<int>(pos.x), static_cast<int>(pos.y), particleSize, particleSize};
   // Draw
   SDL_RenderFillRect(render, &particleRect);
 }
@@ -93,13 +100,13 @@ void Particle::resolveCollisions(Particle &p, std::vector<Particle>& particles){
     }
 
     // SDL draws shapes starting from the top-left. So the centre of each square is found here
-    Vector centreOfP = p.pos + Vector(PARTICLE_SIZE / 2, PARTICLE_SIZE / 2);
-    Vector centreOfOtherP = otherP.pos + Vector(PARTICLE_SIZE / 2, PARTICLE_SIZE / 2);
+    Vector centreOfP = p.pos + Vector(particleSize / 2, particleSize / 2);
+    Vector centreOfOtherP = otherP.pos + Vector(particleSize / 2, particleSize / 2);
     Vector distance = centreOfP - centreOfOtherP;
 
     // How much the particles overlap in each axis
-    float overlapX = PARTICLE_SIZE - std::abs(distance.x);
-    float overlapY = PARTICLE_SIZE - std::abs(distance.y);
+    float overlapX = particleSize - std::abs(distance.x);
+    float overlapY = particleSize - std::abs(distance.y);
 
     // If they are touching, there is collision!!
     if(overlapX > 0 && overlapY > 0){ // TODO: use AABB instead
@@ -160,45 +167,35 @@ void Particle::resolveCollisions(Particle &p, std::vector<Particle>& particles){
 
 
 void Particle::resolveForces(Particle &p, std::vector<Particle>& particles){
-  bool attract{false};
-
   for(Particle& otherP : particles){
-  
+
     if(&p == &otherP) // If same particle, skip
       continue;
 
-    attract = false;
-
-    if(p.col == otherP.col){ // If same colour, attract
-      attract = true;
-      //continue;
-    }
-    
-
     // SDL draws shapes starting from the top-left. So the centre of each square is found here
-    Vector centreOfP = p.pos + Vector(PARTICLE_SIZE / 2, PARTICLE_SIZE / 2);
-    Vector centreOfOtherP = otherP.pos + Vector(PARTICLE_SIZE / 2, PARTICLE_SIZE / 2);
+    Vector centreOfP = p.pos + Vector(particleSize / 2, particleSize / 2);
+    Vector centreOfOtherP = otherP.pos + Vector(particleSize / 2, particleSize / 2);
     Vector distance = centreOfP - centreOfOtherP;
 
-    if(distance.x > 25 || distance.y > 25){ // OR I can do opposite check and check if both are within distance value (and do forces)
+    if(distance.x > 35 || distance.y > 35){ // TODO: OR I can do opposite check and check if both are within distance value (and do forces)
       continue; // Too far
     }
-    // TODO: too close (avoid divide by 0)
+    // TODO: too close (avoid divide by 0) (idk if needed)
 
     float magnitude = std::sqrt(distance.x * distance.x + distance.y * distance.y);
     distance.Normalize(); // Normal vector now (prolly change)
-    float strength = 1000;
+    float strength = 1000; // TODO: magic number
 
     float forceMag = strength / (magnitude * magnitude);
     Vector force = distance * forceMag;
-    
-    if(attract){
-      otherP.vel += force;
-      p.vel -= force;
-    }
-    else{
-      otherP.vel -= force;
-      p.vel += force;
-    }
+    // Force points from otherP to p
+
+    // Compute attract/repel force depending on config
+    float interactionP = InteractionMatrix[p.col][otherP.col];
+    float interactionOtherP = InteractionMatrix[otherP.col][p.col];
+
+    // Apply forces
+    otherP.vel += force * interactionOtherP;
+    p.vel -= force * interactionP;
   }
 }

@@ -6,7 +6,7 @@
 #include "../include/particle.h"
 #include "../include/timer.h"
 
-std::vector<Particle> particles;
+std::vector<Particle> g_particles;
 
 int main(int argc, char** argv){
 
@@ -25,10 +25,12 @@ int main(int argc, char** argv){
   int num_particles = std::stoi(argv[1]);
 
   for(int i = 0; i < num_particles; i++){
-    if(i%2)
-    particles.push_back(Particle(R));
+    if(i%3==0)
+    g_particles.push_back(Particle(R));
+    else if (i%3 == 1)
+    g_particles.push_back(Particle(G));
     else
-    particles.push_back(Particle(B));
+    g_particles.push_back(Particle(B));
   }
 
   while(!quit){
@@ -60,7 +62,7 @@ int main(int argc, char** argv){
 
       float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
 
-      for(Particle& p : particles){
+      for(Particle& p : g_particles){
         p.Move(time);
         p.Draw(render);
       }

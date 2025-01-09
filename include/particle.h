@@ -1,10 +1,10 @@
 #pragma once 
 
 #include "../include/vector.h"
-#define PARTICLE_SIZE 10
 
 enum Colour{
   R,
+  G,
   B
 };
 
@@ -15,6 +15,16 @@ class Particle{
     Vector pos, vel, acc;
     // And type
     Colour col;
+
+    // Interaction between different colours
+    // Since this is static and the definition is provided here, it must be inlined
+    inline static const std::vector<std::vector<float>> InteractionMatrix = {
+    // R  G  B
+    { -1.0f,  0.25f,  0.25f }, 
+    {  0.25f, -1.0f,  0.25f }, 
+    {  0.25f,  0.25f, -1.0f }  
+    // Example: All particles repel same kind, attract each other
+    };
 
   public:
     Particle(Colour c);
