@@ -14,5 +14,6 @@ class Timer{
     // Get real-life time that has passed since last call
     uint32_t getTicks();
 
+    // Unpause (update) timer when sim is unpaused
     void unpause();
 };

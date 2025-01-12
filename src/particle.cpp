@@ -22,6 +22,18 @@ Particle::Particle(Colour c){
   col = c;
 }
 
+Particle::Particle(Colour c, Vector pos){
+
+  // Create particle with specified position 
+  this->pos = pos;
+  vel.rand(-maxVel, maxVel); 
+  acc.randNorm();
+  acc *= 100; // Scale acc // TODO: scuffed
+
+  // Also has a type (depending on colour)
+  col = c;
+}
+
 void Particle::Move(float time){
   // Each frame, give particle random acceleration
   acc.randNorm();

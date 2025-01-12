@@ -1,14 +1,13 @@
 #pragma once
 
 // My own 2D physics vector
-typedef struct Vector{
+struct Vector{
   // 2D
   float x;
   float y;
 
-  // Default constructor
   Vector() : x(0), y(0) {}
-  // Custom constructor
+
   Vector(float x1, float y1) : x(x1), y(y1) {}
 
   // Update position/velocity based on time elapsed
@@ -47,11 +46,13 @@ typedef struct Vector{
   // Generate a random vector based on bounds [a, b]
   void rand(float a, float b);
 
+  // Compute dot product
   float Dot(const Vector &o) const;
 
+  // Normalize vector
   void Normalize();
 
-  // Generate a random unit vector
+  // Generate a random normalized unit vector
   void randNorm();
-} Vector;
+};
 

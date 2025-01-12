@@ -20,14 +20,18 @@ class Particle{
     // Since this is static and the definition is provided here, it must be inlined
     inline static const std::vector<std::vector<float>> InteractionMatrix = {
     // R  G  B
-    { -1.0f,  0.25f,  0.25f }, 
-    {  0.25f, -1.0f,  0.25f }, 
-    {  0.25f,  0.25f, -1.0f }  
+    { -1.0f,  -1.0f,  -1.0f }, 
+    {  -1.0f, -1.0f,  -1.0f }, 
+    {  -1.0f,  -1.0f, -1.0f }  
     // Example: All particles repel same kind, attract each other
     };
 
   public:
+    // Create particle of specified type with random attributes (pos,vel,acc)
     Particle(Colour c);
+
+    // Create particle with specific position
+    Particle(Colour c, Vector pos);
 
     // Update particle's movement based on time elapsed
     void Move(float time);
