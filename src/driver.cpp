@@ -17,7 +17,7 @@ struct SimState{
   Timer timer{};
 };
 
-void handleEvents(SDL_Event event, SimState &state);
+void handleEvent(SDL_Event event, SimState &state);
 
 int main(int argc, char** argv){
 
@@ -43,7 +43,7 @@ int main(int argc, char** argv){
   while(state.quit == false){
     
     while(SDL_PollEvent(&event) != 0){ // Handle all user input (keyboard clicks, mouse presses)
-      handleEvents(event, state);
+      handleEvent(event, state);
     }
 
     /* Game loop */
@@ -69,7 +69,7 @@ int main(int argc, char** argv){
   SDL_Quit();
 }
 
-void handleEvents(SDL_Event event, SimState &state){
+void handleEvent(SDL_Event event, SimState &state){ // TODO: lil messy
   static int lastSpawnTime{0};
 
   if(event.type == SDL_QUIT){ // User request quit
@@ -86,6 +86,7 @@ void handleEvents(SDL_Event event, SimState &state){
   else if(event.type == SDL_MOUSEBUTTONDOWN && state.paused == false){ // Mouse was pressed and not currently paused
       int x, y;
       SDL_GetMouseState(&x, &y);
+      if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
       Vector pos{static_cast<float>(x), static_cast<float>(y)};
       g_particles.push_back(Particle(G, pos));
       state.pressed = true;
@@ -99,6 +100,7 @@ void handleEvents(SDL_Event event, SimState &state){
       if(currentTime - lastSpawnTime >= state.spawnInterval){ // Spawn particles at specified rate
         int x, y;
         SDL_GetMouseState(&x, &y);
+        if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
         Vector pos{static_cast<float>(x), static_cast<float>(y)};
         g_particles.push_back(Particle(static_cast<Colour>(x%3), pos));
         lastSpawnTime = currentTime;
