@@ -8,8 +8,8 @@
 #include "../include/vector.h"
 
 extern std::vector<Particle> g_particles;
-const int particleSize{10};
-const int maxVel{105};
+const int particleSize{6};
+const float maxVel{105};
 
 Particle::Particle(Colour c){
   // Each particle has random position, velocity, and acceleration
@@ -39,46 +39,28 @@ void Particle::Move(float time){
   acc.randNorm();
   acc *= 100; // TODO: scuffed scaling
   vel.update(acc, time);
-
-  // Max velocity
-  if(vel.x > maxVel){
-    vel.x = maxVel;
-  }
-  else if(vel.x < -maxVel){
-    vel.x = -maxVel;
-  }
-  if(vel.y > maxVel){
-    vel.y = maxVel;
-  }
-  else if(vel.y < -maxVel){
-    vel.y = -maxVel;
-  }
+  // Limit max velocity
+  vel.x = std::clamp(vel.x, -maxVel, maxVel);
+  vel.y = std::clamp(vel.y, -maxVel, maxVel);
 
   pos.update(vel, time);
-  
-  // Keep particle within window
-  // pos is the top-left coordinates of the square (from which it is drawn)
-  if(pos.x < 0){
+  // Particles will reappear on other side of screen if they move past border
+  if(pos.x + particleSize < 0){
+    pos.x = SCREEN_W;
+  }
+  else if(pos.x > SCREEN_W){
     pos.x = 0;
-    vel.x *= -1;
   }
-  else if(pos.x + particleSize > SCREEN_W){
-    pos.x = SCREEN_W - particleSize;
-    vel.x *= -1;
+  if(pos.y + particleSize < 0){
+    pos.y = SCREEN_H;
   }
-  if(pos.y < 0){
+  else if(pos.y > SCREEN_H){
     pos.y = 0;
-    vel.y *= -1;
-  }
-  else if(pos.y + particleSize > SCREEN_H){
-    pos.y = SCREEN_H - particleSize;
-    vel.y *= -1;
   }
 
   // Handle any physical collisions
   resolveCollisions(*this, g_particles);
-
-  // Handle any magic forces
+  // Handle any attract/repel forces
   resolveForces(*this, g_particles);
 }
 
