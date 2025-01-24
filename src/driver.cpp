@@ -98,8 +98,10 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         break;
       
       case SDLK_MINUS:
-        zoom_level -= 0.1;
-        SDL_RenderSetScale(render, zoom_level, zoom_level);
+        if(zoom_level > 1){
+          zoom_level -= 0.1;
+          SDL_RenderSetScale(render, zoom_level, zoom_level);
+        }
         break;
     }
   }
