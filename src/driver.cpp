@@ -24,12 +24,16 @@ static bool quit{false};
 // User pause status
 static bool paused{false};
 
+static SDL_Rect srcRect = {0, 0, SCREEN_W, SCREEN_H};  // Portion of the world to zoom into 
+
 int main(int argc, char** argv){
 
-  // Setup SDL window and renderer 
-  SDL_Window *window;
-  init(window, render);
+  // Setup SDL window (the screen), render, and texture (for drawing particles)
+  SDL_Window *window{nullptr};
+  SDL_Texture *texture{nullptr};
+  init(window, render, texture);
 
+  SDL_Rect dstRect = { 0, 0, SCREEN_W, SCREEN_H};  // Fit the zoomed area to the screen
   SDL_Event event;
 
   int num_particles = std::stoi(argv[1]);
@@ -41,7 +45,7 @@ int main(int argc, char** argv){
 
   /* Game loop */
   while(quit == false){
-
+    SDL_SetRenderTarget(render, texture); // render to the texture
     while(SDL_PollEvent(&event) != 0){ // Handle all user input (keyboard clicks, mouse actions)
       handleEvent(event);
     }
@@ -59,6 +63,10 @@ int main(int argc, char** argv){
       p.Move(time); 
       p.Draw(render);
     }
+
+    // After rendering to the texture, you can reset the target
+    SDL_SetRenderTarget(render, NULL);  // Switch back to the default render target (the window)
+    SDL_RenderCopy(render, texture, &srcRect, &dstRect);  // This will render the entire texture to the window
     SDL_RenderPresent(render); // Display
   }
 
@@ -76,8 +84,8 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       zoom_level : For zooming
   */ 
   static bool mouse_pressed{false};
-  static int last_spawn_time{0}; 
   static const int spawn_interval{50};
+  static int last_spawn_time{0}; 
   static float zoom_level{1};
 
   if(event.type == SDL_QUIT){ // User request quit
@@ -93,24 +101,22 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         break;
 
       case SDLK_EQUALS:
-        zoom_level += 0.1;
-        SDL_RenderSetScale(render, zoom_level, zoom_level);
+        srcRect = {SCREEN_W/4, SCREEN_H/4, SCREEN_W/2, SCREEN_H/2};
         break;
       
       case SDLK_MINUS:
-        if(zoom_level > 1){
-          zoom_level -= 0.1;
-          SDL_RenderSetScale(render, zoom_level, zoom_level);
-        }
+        srcRect = {0, 0, SCREEN_W, SCREEN_H};
         break;
     }
   }
   else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){ // Mouse was pressed and not currently paused
       int x, y;
       SDL_GetMouseState(&x, &y);
+      // If mouse is not in screen, don't spawn
       if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
+      // Get position for particle (scaled based on zoom level)
       Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)};
-      g_particles.push_back(Particle(G, pos));
+      g_particles.push_back(Particle(G, pos)); // TODO: not rand
       mouse_pressed = true;
   }
   else if (event.type == SDL_MOUSEBUTTONUP){ // Mouse released
@@ -122,9 +128,11 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       if(currentTime - last_spawn_time >= spawn_interval){ // Spawn particles at specified rate
         int x, y;
         SDL_GetMouseState(&x, &y);
+        // If mouse is not in screen, don't spawn
         if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
+        // Get position for particle (scaled based on zoom level)
         Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)};
-        g_particles.push_back(Particle(static_cast<Colour>(x%3), pos));
+        g_particles.push_back(Particle(static_cast<Colour>(x%3), pos)); // TODO: not rand
         last_spawn_time = currentTime;
       }
     }
