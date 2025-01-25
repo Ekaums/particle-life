@@ -8,36 +8,29 @@
 #include "../include/vector.h"
 
 extern std::vector<Particle> g_particles;
-const int particleSize{6};
-const float maxVel{105};
 
-Particle::Particle(Colour c){
+Particle::Particle(Colour c) : col(c){
+
   // Each particle has random position, velocity, and acceleration
   pos.rand(0, SCREEN_W); // TODO: scuffed random position
   vel.rand(-maxVel, maxVel); 
   acc.randNorm();
-  acc *= 100; // Scale acc // TODO: scuffed
-
-  // Also has a type (depending on colour)
-  col = c;
+  acc *= accScale;
 }
 
-Particle::Particle(Colour c, Vector pos){
+Particle::Particle(Colour c, Vector pos) : col(c){
 
   // Create particle with specified position 
   this->pos = pos;
   vel.rand(-maxVel, maxVel); 
   acc.randNorm();
-  acc *= 100; // Scale acc // TODO: scuffed
-
-  // Also has a type (depending on colour)
-  col = c;
+  acc *= accScale; // Scale acc
 }
 
 void Particle::Move(float time){
   // Each frame, give particle random acceleration
   acc.randNorm();
-  acc *= 100; // TODO: scuffed scaling
+  acc *= accScale; // Scale acc
   vel.update(acc, time);
   // Limit max velocity
   vel.x = std::clamp(vel.x, -maxVel, maxVel);

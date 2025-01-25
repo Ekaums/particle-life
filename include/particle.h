@@ -13,18 +13,24 @@ class Particle{
   private:
     // Each particle has position, velocity, and acceleration
     Vector pos, vel, acc;
-    // And type
-    Colour col;
 
-    // Interaction between different colours
+    // And type
+    const Colour col;
+
+    // Interaction between different types
     // Since this is static and the definition is provided here, it must be inlined
     inline static const std::vector<std::vector<float>> InteractionMatrix = {
-    // R  G  B
-    { -1.0f,  -1.0f,  -1.0f }, 
-    {  -1.0f, -1.0f,  -1.0f }, 
-    {  -1.0f,  -1.0f, -1.0f }  
-    // Example: All particles repel same kind, attract each other
+      // R  G  B
+      { -0.5f,  1.0f,  -1.0f }, 
+      {  -1.0f, -0.5f,  1.0f }, 
+      {  1.0f,  -1.0f, -0.5f }  
     };
+
+    // Particle attributes
+    static const int particleSize{8};
+    static const int accScale{100};
+    // Non-integral types can't be initalized in class declaration (therefore need to be inlined)
+    inline static const float maxVel{115};
 
   public:
     // Create particle of specified type with random attributes (pos,vel,acc)

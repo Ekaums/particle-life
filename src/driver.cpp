@@ -107,6 +107,22 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       case SDLK_MINUS:
         srcRect = {0, 0, SCREEN_W, SCREEN_H};
         break;
+
+      case SDLK_LEFT:
+        srcRect.x -= 10;
+        break;
+      
+      case SDLK_RIGHT:
+        srcRect.x += 10;
+        break;
+
+      case SDLK_UP:
+        srcRect.y += 10;
+        break;
+
+      case SDLK_DOWN:
+        srcRect.y -= 10;
+        break;
     }
   }
   else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){ // Mouse was pressed and not currently paused
@@ -115,7 +131,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       // If mouse is not in screen, don't spawn
       if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
       // Get position for particle (scaled based on zoom level)
-      Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)};
+      Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)}; // TODO: fix mouse scaling
       g_particles.push_back(Particle(G, pos)); // TODO: not rand
       mouse_pressed = true;
   }
@@ -131,7 +147,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         // If mouse is not in screen, don't spawn
         if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
         // Get position for particle (scaled based on zoom level)
-        Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)};
+        Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)}; // TODO: fix mouse scaling
         g_particles.push_back(Particle(static_cast<Colour>(x%3), pos)); // TODO: not rand
         last_spawn_time = currentTime;
       }
