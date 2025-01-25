@@ -33,19 +33,22 @@ int main(int argc, char** argv){
   SDL_Texture *texture{nullptr};
   init(window, render, texture);
 
-  SDL_Rect dstRect = { 0, 0, SCREEN_W, SCREEN_H};  // Fit the zoomed area to the screen
-  SDL_Event event;
+  // Used for zoom in/out. Fits the zoomed area to the screen
+  SDL_Rect dstRect = { 0, 0, SCREEN_W, SCREEN_H};  
 
   int num_particles = std::stoi(argv[1]);
 
-  // Equal amount of each colour
+  // Generate particles
   for(int i = 0; i < num_particles; i++){ // TODO: scuffed
     g_particles.push_back(Particle(static_cast<Colour>(i%3)));
   }
 
+  SDL_Event event;
+
   /* Game loop */
   while(quit == false){
-    SDL_SetRenderTarget(render, texture); // render to the texture
+    // Render to a texture (not directly to screen)
+    SDL_SetRenderTarget(render, texture); 
     while(SDL_PollEvent(&event) != 0){ // Handle all user input (keyboard clicks, mouse actions)
       handleEvent(event);
     }
@@ -57,17 +60,21 @@ int main(int argc, char** argv){
     // Clean screen to prepare for next frame
     SDL_SetRenderDrawColor(render, 222, 216, 228, 255); 
     SDL_RenderClear(render);
-    float time = timer.getTicks() / 1000.0f; // Get time elapsed -- for time-based movement
+
+    // Get time elapsed -- for time-based movement
+    float time = timer.getTicks() / 1000.0f; 
 
     for(Particle& p : g_particles){ // Update all particles and render them
       p.Move(time); 
       p.Draw(render);
     }
 
-    // After rendering to the texture, you can reset the target
-    SDL_SetRenderTarget(render, NULL);  // Switch back to the default render target (the window)
-    SDL_RenderCopy(render, texture, &srcRect, &dstRect);  // This will render the entire texture to the window
-    SDL_RenderPresent(render); // Display
+    // After rendering to the texture, switch back to screen
+    SDL_SetRenderTarget(render, NULL); 
+    // Render to the screen based on zoom in/out (srcRect)
+    SDL_RenderCopy(render, texture, &srcRect, &dstRect);  
+    // Display
+    SDL_RenderPresent(render); 
   }
 
   SDL_DestroyRenderer(render);
@@ -100,27 +107,27 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         }
         break;
 
-      case SDLK_EQUALS:
+      case SDLK_EQUALS: // Zoom in
         srcRect = {SCREEN_W/4, SCREEN_H/4, SCREEN_W/2, SCREEN_H/2};
         break;
       
-      case SDLK_MINUS:
+      case SDLK_MINUS: // Zoom out
         srcRect = {0, 0, SCREEN_W, SCREEN_H};
         break;
 
-      case SDLK_LEFT:
+      case SDLK_LEFT: // Pan left
         srcRect.x -= 10;
         break;
       
-      case SDLK_RIGHT:
+      case SDLK_RIGHT: // Pan right
         srcRect.x += 10;
         break;
 
-      case SDLK_UP:
+      case SDLK_UP: // Pan up
         srcRect.y += 10;
         break;
 
-      case SDLK_DOWN:
+      case SDLK_DOWN: // Pan down
         srcRect.y -= 10;
         break;
     }
@@ -128,10 +135,14 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
   else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){ // Mouse was pressed and not currently paused
       int x, y;
       SDL_GetMouseState(&x, &y);
+
       // If mouse is not in screen, don't spawn
       if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
-      // Get position for particle (scaled based on zoom level)
+
+      // Get position for the particle (scaled based on zoom level)
       Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)}; // TODO: fix mouse scaling
+
+      // Spawn
       g_particles.push_back(Particle(G, pos)); // TODO: not rand
       mouse_pressed = true;
   }
@@ -144,10 +155,14 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       if(currentTime - last_spawn_time >= spawn_interval){ // Spawn particles at specified rate
         int x, y;
         SDL_GetMouseState(&x, &y);
+
         // If mouse is not in screen, don't spawn
         if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
-        // Get position for particle (scaled based on zoom level)
+
+        // Get position for the particle (scaled based on zoom level)
         Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)}; // TODO: fix mouse scaling
+
+        // Spawn
         g_particles.push_back(Particle(static_cast<Colour>(x%3), pos)); // TODO: not rand
         last_spawn_time = currentTime;
       }
