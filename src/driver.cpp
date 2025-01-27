@@ -108,27 +108,49 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         break;
 
       case SDLK_EQUALS: // Zoom in
-        srcRect = {SCREEN_W/4, SCREEN_H/4, SCREEN_W/2, SCREEN_H/2};
+        zoom_level += 0.1;
+
+        // Scale srcRect
+        srcRect.w = SCREEN_W / zoom_level;
+        srcRect.h = SCREEN_H / zoom_level;
+
+        /* 
+           Zoom into centre of screen: this means that the centre of srcRect 
+           (which is srcRect.x + srcRect.w/2 for the x dimension) needs to equal to 
+           centre of screen. Move srcRect.w/2 to other side to get the needed srcRect.x.
+           Same concept for y
+        */
+        srcRect.x = (SCREEN_W/2) - srcRect.w / 2;
+        srcRect.y = (SCREEN_H/2) - srcRect.h / 2;
         break;
       
       case SDLK_MINUS: // Zoom out
-        srcRect = {0, 0, SCREEN_W, SCREEN_H};
+        if(zoom_level == 1){
+          break;
+        }
+        zoom_level -= 0.1;
+
+        srcRect.w = SCREEN_W / zoom_level;
+        srcRect.h = SCREEN_H / zoom_level;
+
+        srcRect.x = (SCREEN_W/2) - srcRect.w / 2;
+        srcRect.y = (SCREEN_H/2) - srcRect.h / 2;
         break;
 
       case SDLK_LEFT: // Pan left
-        srcRect.x -= 10;
+        srcRect.x = (srcRect.x - 10 > 0) ? srcRect.x - 10 : 0;
         break;
       
       case SDLK_RIGHT: // Pan right
-        srcRect.x += 10;
+        srcRect.x = (srcRect.x + srcRect.w + 10 < SCREEN_W) ? srcRect.x + 10 : srcRect.x;
         break;
 
       case SDLK_UP: // Pan up
-        srcRect.y += 10;
+        srcRect.y = (srcRect.y - 10 > 0) ? srcRect.x - 10 : 0;
         break;
 
       case SDLK_DOWN: // Pan down
-        srcRect.y -= 10;
+        srcRect.y = (srcRect.y + srcRect.h + 10 < SCREEN_H) ? srcRect.y + 10 : srcRect.y;
         break;
     }
   }
