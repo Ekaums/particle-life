@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "../include/vector.h"
+#include "../include/vector.hpp"
 
 enum Colour{
   R,

@@ -1,7 +1,7 @@
 #include <SDL.h>
 #include <SDL_rect.h>
 #include <iostream>
-#include "../include/screen.h"
+#include "../include/screen.hpp"
 
 void init(SDL_Window* &window, SDL_Renderer* &render, SDL_Texture* &texture){
   // Init

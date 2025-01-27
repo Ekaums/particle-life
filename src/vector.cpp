@@ -1,4 +1,4 @@
-#include "../include/vector.h"
+#include "../include/vector.hpp"
 #include <random>
 
 void Vector::update(Vector &v1, float time){

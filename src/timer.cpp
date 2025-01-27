@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "../include/timer.h"
+#include "../include/timer.hpp"
 
 uint32_t Timer::getTicks(){
   if(!started){

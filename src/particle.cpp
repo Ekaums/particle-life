@@ -3,9 +3,9 @@
 #include <SDL_rect.h>
 #include <cmath>
 #include <iostream>
-#include "../include/particle.h"
-#include "../include/screen.h"
-#include "../include/vector.h"
+#include "../include/particle.hpp"
+#include "../include/screen.hpp"
+#include "../include/vector.hpp"
 
 extern std::vector<Particle> g_particles;
 

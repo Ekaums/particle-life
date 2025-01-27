@@ -2,9 +2,9 @@
 #include <vector>
 #include <SDL.h>
 #include <SDL_rect.h>
-#include "../include/screen.h"
-#include "../include/particle.h"
-#include "../include/timer.h"
+#include "../include/screen.hpp"
+#include "../include/particle.hpp"
+#include "../include/timer.hpp"
 
 
 void handleEvent(SDL_Event event);
