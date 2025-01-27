@@ -27,8 +27,9 @@ class Particle{
     };
 
     // Particle attributes
-    static const int particleSize{8};
+    static const int particleSize{5};
     static const int accScale{100};
+    static const int forceStrength{1000};
     // Non-integral types can't be initalized in class declaration (therefore need to be inlined)
     inline static const float maxVel{115};
 

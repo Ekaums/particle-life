@@ -171,9 +171,8 @@ void Particle::resolveForces(Particle &p, std::vector<Particle>& particles){
 
     float magnitude = std::sqrt(distance.x * distance.x + distance.y * distance.y);
     distance.Normalize(); // Normal vector now (prolly change)
-    float strength = 1000; // TODO: magic number
 
-    float forceMag = strength / (magnitude * magnitude);
+    float forceMag = forceStrength / (magnitude * magnitude);
     Vector force = distance * forceMag;
     // Force points from otherP to p
 
