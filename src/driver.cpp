@@ -39,8 +39,8 @@ int main(int argc, char** argv){
   int num_particles = std::stoi(argv[1]);
 
   // Generate particles
-  for(int i = 0; i < num_particles; i++){ // TODO: scuffed
-    g_particles.push_back(Particle(static_cast<Colour>(i%3)));
+  for(int i = 0; i < num_particles; i++){ // TODO: scuffed spawning
+    g_particles.push_back(Particle(static_cast<Colour>(i%10)));
   }
 
   SDL_Event event;
@@ -58,7 +58,7 @@ int main(int argc, char** argv){
     continue;
 
     // Clean screen to prepare for next frame
-    SDL_SetRenderDrawColor(render, 222, 216, 228, 255); 
+    SDL_SetRenderDrawColor(render, 0, 0, 0, 255); 
     SDL_RenderClear(render);
 
     // Get time elapsed -- for time-based movement
@@ -192,7 +192,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       Vector pos{mouseX, mouseY};
 
       // Spawn
-      g_particles.push_back(Particle(G, pos)); // TODO: not rand
+      g_particles.push_back(Particle(Green, pos)); // TODO: not rand
       mouse_pressed = true;
   }
   else if (event.type == SDL_MOUSEBUTTONUP){ // Mouse released
@@ -215,7 +215,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         Vector pos{mouseX, mouseY};
 
         // Spawn
-        g_particles.push_back(Particle(static_cast<Colour>(x%3), pos)); // TODO: not rand
+        g_particles.push_back(Particle(static_cast<Colour>(x%10), pos)); // TODO: not rand
         last_spawn_time = currentTime;
       }
     }

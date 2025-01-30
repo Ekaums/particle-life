@@ -61,18 +61,47 @@ void Particle::Draw(SDL_Renderer* &render){
   // Set colour for particle
   // TODO: use a map or smthng instead of switch case
   switch (col){
-    case R:
-      SDL_SetRenderDrawColor(render, 255, 128, 128, 255);
+    case Red:
+      SDL_SetRenderDrawColor(render, 230, 92, 92, 255);
       break;
 
-    case G:
-      SDL_SetRenderDrawColor(render, 0, 168, 107, 255);
+    case Green:
+      SDL_SetRenderDrawColor(render, 120, 200, 120, 255);
       break;
 
-    case B:
-      SDL_SetRenderDrawColor(render, 100, 149, 237, 255);
+    case Blue:
+      SDL_SetRenderDrawColor(render, 86, 156, 214, 255);
+      break;
+
+    case Yellow:
+      SDL_SetRenderDrawColor(render, 247, 220, 111, 255);
+      break;
+    
+    case Purple:
+      SDL_SetRenderDrawColor(render, 161, 119, 202, 255);
+      break;
+
+    case Pink:
+      SDL_SetRenderDrawColor(render, 240, 150, 170, 255);
+      break;
+    
+    case Orange:
+      SDL_SetRenderDrawColor(render, 255, 165, 100, 255);
+      break;
+    
+    case Magenta:
+      SDL_SetRenderDrawColor(render, 200, 100, 180, 255);
+      break;
+
+    case Aqua:
+      SDL_SetRenderDrawColor(render, 100, 200, 200, 255);
+      break;
+
+    case Teal:
+      SDL_SetRenderDrawColor(render, 72, 150, 140, 255);
       break;
   }
+  
   // Generate particle
   SDL_Rect particleRect = {static_cast<int>(pos.x), static_cast<int>(pos.y), particleSize, particleSize};
   // Draw
