@@ -94,6 +94,8 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
   static const int spawn_interval{50};
   static int last_spawn_time{0}; 
   static float zoom_level{1};
+  int x, y;
+  float old_zoom;
 
   if(event.type == SDL_QUIT){ // User request quit
     quit = true;
@@ -109,6 +111,10 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
 
       // TODO: move this functionality to classes
       case SDLK_EQUALS: // Zoom in
+      if(zoom_level == 4.5){ // TODO: magic num
+        break;
+      }
+        old_zoom = zoom_level;
         zoom_level += 0.1;
 
         // Scale srcRect
@@ -121,21 +127,39 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
            centre of screen. Move srcRect.w/2 to other side to get the needed srcRect.x.
            Same concept for y
         */
-        srcRect.x = (SCREEN_W/2) - srcRect.w / 2;
-        srcRect.y = (SCREEN_H/2) - srcRect.h / 2;
+
+        SDL_GetMouseState(&x, &y);
+        x = (x/old_zoom) + srcRect.x;
+        y= (y/old_zoom) + srcRect.y;
+
+        srcRect.x = x - srcRect.w / 2;
+        srcRect.y = y - srcRect.h / 2;
+        srcRect.x = std::clamp(srcRect.x, 0, SCREEN_W-srcRect.w);
+        srcRect.y = std::clamp(srcRect.y, 0, SCREEN_H-srcRect.h);
+        std::cout << "zoom lvl: " << zoom_level << '\n';
         break;
       
       case SDLK_MINUS: // Zoom out
-        if(zoom_level == 1){
+        if(zoom_level == 1){ // TODO: magic num
           break;
         }
+        old_zoom = zoom_level;
         zoom_level -= 0.1;
 
         srcRect.w = SCREEN_W / zoom_level;
         srcRect.h = SCREEN_H / zoom_level;
 
-        srcRect.x = (SCREEN_W/2) - srcRect.w / 2;
-        srcRect.y = (SCREEN_H/2) - srcRect.h / 2;
+
+        SDL_GetMouseState(&x, &y);
+        x = (x/old_zoom) + srcRect.x;
+        y= (y/old_zoom) + srcRect.y;
+
+        srcRect.x = x - srcRect.w / 2;
+        srcRect.y = y - srcRect.h / 2;
+        srcRect.x = std::clamp(srcRect.x, 0, SCREEN_W-srcRect.w);
+        srcRect.y = std::clamp(srcRect.y, 0, SCREEN_H-srcRect.h);
+
+        std::cout << "zoom lvl: " << zoom_level << '\n';
         break;
 
       case SDLK_LEFT: // Pan left
@@ -156,7 +180,6 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
     }
   }
   else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){ // Mouse was pressed and not currently paused
-      int x, y;
       SDL_GetMouseState(&x, &y);
 
       // If mouse is not in screen, don't spawn
