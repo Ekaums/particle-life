@@ -107,6 +107,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         }
         break;
 
+      // TODO: move this functionality to classes
       case SDLK_EQUALS: // Zoom in
         zoom_level += 0.1;
 
@@ -146,7 +147,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         break;
 
       case SDLK_UP: // Pan up
-        srcRect.y = (srcRect.y - 10 > 0) ? srcRect.x - 10 : 0;
+        srcRect.y = (srcRect.y - 10 > 0) ? srcRect.y - 10 : 0;
         break;
 
       case SDLK_DOWN: // Pan down
@@ -161,8 +162,11 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       // If mouse is not in screen, don't spawn
       if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
 
-      // Get position for the particle (scaled based on zoom level)
-      Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)}; // TODO: fix mouse scaling
+      // Get position for the particle (scaled based on zoom level + panning)
+      float mouseX = (x/zoom_level) + srcRect.x;
+      float mouseY = (y/zoom_level) + srcRect.y;
+
+      Vector pos{mouseX, mouseY};
 
       // Spawn
       g_particles.push_back(Particle(G, pos)); // TODO: not rand
@@ -181,8 +185,11 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         // If mouse is not in screen, don't spawn
         if(x < 0 || x > SCREEN_W || y < 0 || y > SCREEN_H) return;
 
-        // Get position for the particle (scaled based on zoom level)
-        Vector pos{static_cast<float>(x/zoom_level), static_cast<float>(y/zoom_level)}; // TODO: fix mouse scaling
+        // Get position for the particle (scaled based on zoom level + panning)
+        float mouseX = (x/zoom_level) + srcRect.x;
+        float mouseY = (y/zoom_level) + srcRect.y;
+
+        Vector pos{mouseX, mouseY};
 
         // Spawn
         g_particles.push_back(Particle(static_cast<Colour>(x%3), pos)); // TODO: not rand
