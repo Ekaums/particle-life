@@ -25,5 +25,5 @@ void init(SDL_Window* &window, SDL_Renderer* &render, SDL_Texture* &texture){
   }
 
   // Create texture (to draw all particles on)
-  texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_W, SCREEN_H);
+  texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, WORLD_W, WORLD_H);
 }

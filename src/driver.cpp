@@ -24,7 +24,8 @@ static bool quit{false};
 // User pause status
 static bool paused{false};
 
-static SDL_Rect srcRect = {0, 0, SCREEN_W, SCREEN_H};  // Portion of the world to zoom into 
+// Start by displaying the centre of the world (with screen dimensions)
+static SDL_Rect srcRect = {(WORLD_W - SCREEN_W) / 2, (WORLD_H - SCREEN_H) / 2, SCREEN_W, SCREEN_H};  // Portion of the world to zoom into 
 
 int main(int argc, char** argv){
 
@@ -91,7 +92,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       zoom_level : For zooming
   */ 
   static bool mouse_pressed{false};
-  static const int spawn_interval{50};
+  static const int spawn_interval{25};
   static int last_spawn_time{0}; 
   static float zoom_level{1};
   int x, y;
@@ -111,7 +112,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
 
       // TODO: move this functionality to classes
       case SDLK_EQUALS: // Zoom in
-      if(zoom_level == 4.5){ // TODO: magic num
+      if(zoom_level > 4.5){ // TODO: magic num
         break;
       }
         old_zoom = zoom_level;
@@ -134,13 +135,12 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
 
         srcRect.x = x - srcRect.w / 2;
         srcRect.y = y - srcRect.h / 2;
-        srcRect.x = std::clamp(srcRect.x, 0, SCREEN_W-srcRect.w);
-        srcRect.y = std::clamp(srcRect.y, 0, SCREEN_H-srcRect.h);
-        std::cout << "zoom lvl: " << zoom_level << '\n';
+        srcRect.x = std::clamp(srcRect.x, 0, WORLD_W-srcRect.w);
+        srcRect.y = std::clamp(srcRect.y, 0, WORLD_H-srcRect.h);
         break;
       
       case SDLK_MINUS: // Zoom out
-        if(zoom_level == 1){ // TODO: magic num
+        if(zoom_level < 0.2){ // TODO: magic num
           break;
         }
         old_zoom = zoom_level;
@@ -156,10 +156,8 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
 
         srcRect.x = x - srcRect.w / 2;
         srcRect.y = y - srcRect.h / 2;
-        srcRect.x = std::clamp(srcRect.x, 0, SCREEN_W-srcRect.w);
-        srcRect.y = std::clamp(srcRect.y, 0, SCREEN_H-srcRect.h);
-
-        std::cout << "zoom lvl: " << zoom_level << '\n';
+        srcRect.x = std::clamp(srcRect.x, 0, WORLD_W-srcRect.w);
+        srcRect.y = std::clamp(srcRect.y, 0, WORLD_H-srcRect.h);
         break;
 
       case SDLK_LEFT: // Pan left
@@ -167,7 +165,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         break;
       
       case SDLK_RIGHT: // Pan right
-        srcRect.x = (srcRect.x + srcRect.w + 10 < SCREEN_W) ? srcRect.x + 10 : srcRect.x;
+        srcRect.x = (srcRect.x + srcRect.w + 10 < WORLD_W) ? srcRect.x + 10 : srcRect.x;
         break;
 
       case SDLK_UP: // Pan up
@@ -175,7 +173,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
         break;
 
       case SDLK_DOWN: // Pan down
-        srcRect.y = (srcRect.y + srcRect.h + 10 < SCREEN_H) ? srcRect.y + 10 : srcRect.y;
+        srcRect.y = (srcRect.y + srcRect.h + 10 < WORLD_H) ? srcRect.y + 10 : srcRect.y;
         break;
     }
   }

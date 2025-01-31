@@ -12,7 +12,7 @@ extern std::vector<Particle> g_particles;
 Particle::Particle(Colour c) : col(c){
 
   // Each particle has random position, velocity, and acceleration
-  pos.rand(0, SCREEN_W); // TODO: scuffed random position
+  pos.rand(0, WORLD_W); // TODO: scuffed random position
   vel.rand(-maxVel, maxVel); 
   acc.randNorm();
   acc *= accScale;
@@ -37,17 +37,17 @@ void Particle::Move(float time){
   vel.y = std::clamp(vel.y, -maxVel, maxVel);
 
   pos.update(vel, time);
-  // Particles will reappear on other side of screen if they move past border
+  // Particles spawn based on world dimensions (which are larger than viewable screen) 
   if(pos.x + particleSize < 0){
-    pos.x = SCREEN_W;
+    pos.x = WORLD_W;
   }
-  else if(pos.x > SCREEN_W){
+  else if(pos.x > WORLD_W){
     pos.x = 0;
   }
   if(pos.y + particleSize < 0){
-    pos.y = SCREEN_H;
+    pos.y = WORLD_H;
   }
-  else if(pos.y > SCREEN_H){
+  else if(pos.y > WORLD_H){
     pos.y = 0;
   }
 
