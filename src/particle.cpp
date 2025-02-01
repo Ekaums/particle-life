@@ -61,43 +61,43 @@ void Particle::Draw(SDL_Renderer* &render){
   // Set colour for particle
   // TODO: use a map or smthng instead of switch case
   switch (col){
-    case Red:
+    case Colour::Red:
       SDL_SetRenderDrawColor(render, 230, 92, 92, 255);
       break;
 
-    case Green:
+    case Colour::Green:
       SDL_SetRenderDrawColor(render, 120, 200, 120, 255);
       break;
 
-    case Blue:
+    case Colour::Blue:
       SDL_SetRenderDrawColor(render, 86, 156, 214, 255);
       break;
 
-    case Yellow:
+    case Colour::Yellow:
       SDL_SetRenderDrawColor(render, 247, 220, 111, 255);
       break;
     
-    case Purple:
+    case Colour::Purple:
       SDL_SetRenderDrawColor(render, 161, 119, 202, 255);
       break;
 
-    case Pink:
+    case Colour::Pink:
       SDL_SetRenderDrawColor(render, 240, 150, 170, 255);
       break;
     
-    case Orange:
+    case Colour::Orange:
       SDL_SetRenderDrawColor(render, 255, 165, 100, 255);
       break;
     
-    case Magenta:
+    case Colour::Magenta:
       SDL_SetRenderDrawColor(render, 200, 100, 180, 255);
       break;
 
-    case Aqua:
+    case Colour::Aqua:
       SDL_SetRenderDrawColor(render, 100, 200, 200, 255);
       break;
 
-    case Teal:
+    case Colour::Teal:
       SDL_SetRenderDrawColor(render, 72, 150, 140, 255);
       break;
   }
@@ -206,8 +206,8 @@ void Particle::resolveForces(Particle &p, std::vector<Particle>& particles){
     // Force points from otherP to p
 
     // Compute attract/repel force depending on config
-    float interactionP = InteractionMatrix[p.col][otherP.col];
-    float interactionOtherP = InteractionMatrix[otherP.col][p.col];
+    float interactionP = InteractionMatrix[p.col][static_cast<int>(otherP.col)];
+    float interactionOtherP = InteractionMatrix[otherP.col][static_cast<int>(p.col)];
 
     // Apply forces
     otherP.vel += force * interactionOtherP;

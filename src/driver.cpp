@@ -190,7 +190,7 @@ void handleEvent(SDL_Event event){ // TODO: lil messy
       Vector pos{mouseX, mouseY};
 
       // Spawn
-      g_particles.push_back(Particle(Green, pos)); // TODO: not rand
+      g_particles.push_back(Particle(Colour::Green, pos)); // TODO: not rand
       mouse_pressed = true;
   }
   else if (event.type == SDL_MOUSEBUTTONUP){ // Mouse released
