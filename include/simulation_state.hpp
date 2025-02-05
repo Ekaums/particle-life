@@ -5,6 +5,7 @@
 #include "screen.hpp"
 
 
+// Direction that user presses for panning screen
 enum Direction{
   Left,
   Right,
@@ -12,21 +13,23 @@ enum Direction{
   Down
 };
 
+// Handles all user input and simulation state
 class SimState{
 
   private:
-    // why can i init like this again??????
-    bool mouse_pressed{false};
-    bool quit{false};
-    bool paused{false};
+    bool mouse_pressed{false}; // Is mouse pressed?
+    bool quit{false}; // Has user request quit?
+    bool paused{false}; // Is sim paused?
+
+    // Used for spawning particles at a rate
     int current_time{0};
     int last_spawn_time{0};
     const int spawn_interval{25};
-    float zoom_level{1};
+
+    float zoom_level{1}; // Scale of zoom
     SDL_Rect src_rect{(WORLD_W - SCREEN_W) / 2, (WORLD_H - SCREEN_H) / 2, SCREEN_W, SCREEN_H};  // Portion of the world to zoom into 
     Timer timer{};
 
-    void requestQuit() { quit = true;}
     void togglePause();
     void handleZoom(float zoom);
 
@@ -41,5 +44,6 @@ class SimState{
     const SDL_Rect& getSrcRect() const { return src_rect;}
     float getTicks() { return timer.getTicks();}
 
-    void handleEvents();
+    // Main API: Handles all user input events
+    void handleEvents(); 
 };

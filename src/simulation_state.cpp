@@ -7,13 +7,14 @@
 
 extern std::vector<Particle> g_particles;
 
+// Main API: Handle all user input
 void SimState::handleEvents(){
   SDL_Event event;
 
-  while(SDL_PollEvent(&event) != 0){
+  while(SDL_PollEvent(&event) != 0){ // For all given inputs
     
-    if(event.type == SDL_QUIT){
-      requestQuit();
+    if(event.type == SDL_QUIT){ // Exit window
+        quit = true;
     }
     else if(event.type == SDL_KEYDOWN){
       switch(event.key.keysym.sym){
@@ -21,11 +22,11 @@ void SimState::handleEvents(){
           togglePause();
           break;
 
-        case SDLK_EQUALS:
+        case SDLK_EQUALS: // Zoom in
           handleZoom(0.1);
           break;
         
-        case SDLK_MINUS:
+        case SDLK_MINUS: // Zoom out
           handleZoom(-0.1);
           break;
         
@@ -46,7 +47,7 @@ void SimState::handleEvents(){
           break;
       }
     }
-    else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){
+    else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){ // If Left click, spawn a particle
       spawnParticle();
       mouse_pressed = true;
     }
@@ -55,8 +56,9 @@ void SimState::handleEvents(){
     }
     else if(event.type == SDL_MOUSEMOTION){
       if(mouse_pressed){
+        // If mouse is still pressed while moving, spawn particles at mouse pos
         current_time = SDL_GetTicks();
-        if(current_time - last_spawn_time >= spawn_interval){
+        if(current_time - last_spawn_time >= spawn_interval){ // Spawn at a rate
           spawnParticle();
           last_spawn_time = current_time;
         }
@@ -90,7 +92,6 @@ void SimState::handleZoom(float zoom){
       centre of screen. Move src_rect.w/2 to other side to get the needed src_rect.x.
       Same concept for y
   */
-
   int x, y;
   SDL_GetMouseState(&x, &y);
   x = (x/old_zoom) + src_rect.x;
