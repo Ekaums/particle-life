@@ -33,12 +33,14 @@ struct Vector{
     this->y -= v1.y;
   }
 
-  Vector operator*(float n) const{
+  template <typename T>
+  Vector operator*(T n) const{
     return {this->x * n, 
             this->y * n};
   }
 
-  void operator*=(float n){
+  template <typename T>
+  void operator*=(T n){
     this->x *= n; 
     this->y *= n;
   }
