@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include "timer.hpp"
 #include "screen.hpp"
+#include "particle.hpp"
 
 
 // Direction that user presses for panning screen
@@ -21,10 +22,11 @@ class SimState{
     bool quit{false}; // Has user request quit?
     bool paused{false}; // Is sim paused?
 
-    // Used for spawning particles at a rate
+    // Used for spawning particles
     int current_time{0};
     int last_spawn_time{0};
     const int spawn_interval{25};
+    Colour spawn_colour{Colour::Red};
 
     float zoom_level{1}; // Scale of zoom
     SDL_Rect src_rect{(WORLD_W - SCREEN_W) / 2, (WORLD_H - SCREEN_H) / 2, SCREEN_W, SCREEN_H};  // Portion of the world to zoom into 
@@ -36,6 +38,8 @@ class SimState{
     void panScreen(Direction dir);
 
     void spawnParticle();
+
+    void setParticleColour(Colour col){ spawn_colour = col; };
 
   public:
     // Getters

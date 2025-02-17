@@ -27,21 +27,21 @@ class Particle{
 
     // Interaction between different types
     // Since this is static and the definition is provided here, it must be inlined
-    inline static const float self = 0.5f;
+    inline static const float self = 0.1f;
     inline static const float attract = 0.7f;
     inline static const float repel = -0.7f;
 
     inline static std::unordered_map<Colour, std::vector<float>> InteractionMatrix = {
       {Colour::Red,     {self,   attract, repel,   0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
-      {Colour::Blue,    {repel,  self,    attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
-      {Colour::Yellow,  {0.0f,   repel,   self,    attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
-      {Colour::Green,   {0.0f,   0.0f,    repel,   self,    attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
+      {Colour::Green,   {repel,  self,    attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
+      {Colour::Blue,    {0.0f,   repel,   self,    attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
+      {Colour::Yellow,  {0.0f,   0.0f,    repel,   self,    attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f}},
       {Colour::Purple,  {0.0f,   0.0f,    0.0f,    repel,   self,    attract, 0.0f,    0.0f,    0.0f,    0.0f}},
       {Colour::Pink,    {0.0f,   0.0f,    0.0f,    0.0f,    repel,   self,    attract, 0.0f,    0.0f,    0.0f}},
       {Colour::Orange,  {0.0f,   0.0f,    0.0f,    0.0f,    0.0f,    repel,   self,    attract, 0.0f,    0.0f}},
       {Colour::Magenta, {0.0f,   0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    repel,   self,    attract, 0.0f}},
       {Colour::Aqua,    {0.0f,   0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    repel,   self,    attract}},
-      {Colour::Teal,    {attract,0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    repel,   self}}
+      {Colour::Teal,    {attract, 0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    repel,   self}}
     };
 
 

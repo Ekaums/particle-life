@@ -16,7 +16,7 @@ void SimState::handleEvents(){
     if(event.type == SDL_QUIT){ // Exit window
         quit = true;
     }
-    else if(event.type == SDL_KEYDOWN){
+    else if(event.type == SDL_KEYDOWN){ // TODO: clean this up lol
       switch(event.key.keysym.sym){
         case SDLK_SPACE: // Pressing space will pause/unpause
           togglePause();
@@ -45,6 +45,45 @@ void SimState::handleEvents(){
         case SDLK_DOWN:
           panScreen(Down);
           break;
+        
+        case SDLK_1:
+            setParticleColour(Colour::Red);
+            break;
+        
+        case SDLK_2:
+            setParticleColour(Colour::Green);
+            break;
+        case SDLK_3:
+            setParticleColour(Colour::Blue);
+            break;
+        
+        case SDLK_4:
+            setParticleColour(Colour::Yellow);
+            break;
+
+        case SDLK_5:
+            setParticleColour(Colour::Purple);
+            break;
+
+        case SDLK_6:
+            setParticleColour(Colour::Pink);
+            break;
+
+        case SDLK_7:
+            setParticleColour(Colour::Orange);
+            break;
+
+        case SDLK_8:
+            setParticleColour(Colour::Magenta);
+            break;
+
+        case SDLK_9:
+            setParticleColour(Colour::Aqua);
+            break;
+
+        case SDLK_0:
+            setParticleColour(Colour::Teal);
+            break;
       }
     }
     else if(event.type == SDL_MOUSEBUTTONDOWN && paused == false){ // If Left click, spawn a particle
@@ -139,5 +178,5 @@ void SimState::spawnParticle(){
   Vector pos{mouseX, mouseY};
 
   // Spawn
-  g_particles.push_back(Particle(Colour::Green, pos)); // TODO: not rand
+  g_particles.push_back(Particle(spawn_colour, pos)); // TODO: not rand
 }
