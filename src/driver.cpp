@@ -36,6 +36,8 @@ int main(int argc, char** argv){
   // TODO: encapsulate into fns
   while(sim_state.shouldQuit() == false){
 
+    // TODO: quadtree impl
+
     // Handle all inputs
     sim_state.handleEvents();
 
